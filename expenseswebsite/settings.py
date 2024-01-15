@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from dotenv import load_dotenv
 from pathlib import Path
+from django.contrib import messages
 
 load_dotenv()
 
@@ -129,6 +130,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS=[os.path.join(BASE_DIR, 'expenseswebsite/static')]
 STATIC_ROOT=os.path.join(BASE_DIR,'static')
+#путь к папке статик
 
 
 # Default primary key field type
@@ -138,6 +140,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger'
+}
+#єто сообщения об ошибках связанних с бутстрап
+
+# email stuff
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER')
+EMAIL_PORT = 587
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 
 

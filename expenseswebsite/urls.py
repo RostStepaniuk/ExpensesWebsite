@@ -18,9 +18,10 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('', include('expenses.urls')),
+    path('', include('expenses.urls')), # все запроси к корню сайта отправляются в urls app expenses
     path('authentication/', include('authentication.urls')),
     path('preferences/', include('userpreferences.urls')),
     path('income/', include('userincome.urls')),
     path('admin/', admin.site.urls),
 ]
+# адресса которие перенаправляют работу на urls других приложений проекта
