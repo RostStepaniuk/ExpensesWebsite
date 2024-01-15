@@ -23,21 +23,41 @@ def search_expenses(request):
         return JsonResponse(list(data), safe=False)
 
 
+# @login_required(login_url='/authentication/login')
+# def index(request):
+#     categories = Category.objects.all()
+#     expenses = Expense.objects.filter(owner=request.user)
+#     paginator = Paginator(expenses, 5)
+#     page_number = request.GET.get('page')
+#     page_obj = Paginator.get_page(paginator, page_number)
+#     currency = UserPreference.objects.get(user=request.user).currency
+#     context = {
+#         'expenses': expenses,
+#         'page_obj': page_obj,
+#         'currency': currency
+#     }
+#     return render(request, 'expenses/index.html', context)
 @login_required(login_url='/authentication/login')
 def index(request):
     categories = Category.objects.all()
-    expenses = Expense.objects.filter(owner=request.user)
+    expenses = Expense.objects.filter(owner=request.user).order_by('-date')
     paginator = Paginator(expenses, 5)
     page_number = request.GET.get('page')
-    page_obj = Paginator.get_page(paginator, page_number)
-    currency = UserPreference.objects.get(user=request.user).currency
+    page_obj = paginator.get_page(page_number)
+
+    # Используйте get_or_create, чтобы избежать исключения DoesNotExist
+    user_preferences, created = UserPreference.objects.get_or_create(user=request.user)
+    if created:
+        user_preferences.currency = 'USD'  # Задайте дефолтное значение валюты
+        user_preferences.save()
+    currency = user_preferences.currency  # Получаем валюту после get_or_create
+
     context = {
         'expenses': expenses,
         'page_obj': page_obj,
         'currency': currency
     }
     return render(request, 'expenses/index.html', context)
-
 
 @login_required(login_url='/authentication/login')
 def add_expense(request):
