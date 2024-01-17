@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+# адресса которие перенаправляют работу на urls других приложений проекта
 urlpatterns = [
     path('', include('expenses.urls')), # все запроси к корню сайта отправляются в urls app expenses
     path('authentication/', include('authentication.urls')),
@@ -24,4 +25,3 @@ urlpatterns = [
     path('income/', include('userincome.urls')),
     path('admin/', admin.site.urls),
 ]
-# адресса которие перенаправляют работу на urls других приложений проекта
