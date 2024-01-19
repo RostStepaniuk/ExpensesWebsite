@@ -16,7 +16,7 @@ class UserIncome(models.Model):
         return self.source
 
     class Meta:
-        ordering: ['-date']
+        ordering = ['-date']
 
 
 class Source(models.Model):

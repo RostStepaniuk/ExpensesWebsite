@@ -23,7 +23,7 @@ class Expense(models.Model):
     #ordering используется для определения порядка сортировки записей 
     #-date указывает, что записи будут сортироваться по убыванию
     class Meta:
-        ordering: ['-date']
+        ordering = ['-date']
 
 #модель, представляющая таблицу категорий.
 class Category(models.Model):

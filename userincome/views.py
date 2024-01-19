@@ -8,7 +8,7 @@ import json
 from django.http import JsonResponse
 # Create your views here.
 
-
+#поиск доходов
 def search_income(request):
     if request.method == 'POST':
         search_str = json.loads(request.body).get('searchText')
@@ -17,10 +17,14 @@ def search_income(request):
             date__istartswith=search_str, owner=request.user) | UserIncome.objects.filter(
             description__icontains=search_str, owner=request.user) | UserIncome.objects.filter(
             source__icontains=search_str, owner=request.user)
+        #.values() в Django используется для извлечения значений полей из объектов модели 
+        # (или QuerySet) и представления их в виде словарей
         data = income.values()
         return JsonResponse(list(data), safe=False)
 
 
+#єто метод отвечающий за отображение страници с доходами
+#показивает доходи юзера, обьект страници и валюту
 @login_required(login_url='/authentication/login')
 def index(request):
     categories = Source.objects.all()
@@ -37,13 +41,16 @@ def index(request):
     return render(request, 'income/index.html', context)
 
 
+#добавление дохода
 @login_required(login_url='/authentication/login')
 def add_income(request):
     sources = Source.objects.all()
+    #контекст содержит имена источников а так же пост.запрос отправленний юезром
     context = {
         'sources': sources,
         'values': request.POST
     }
+
     if request.method == 'GET':
         return render(request, 'income/add_income.html', context)
 
@@ -68,6 +75,7 @@ def add_income(request):
         return redirect('income')
 
 
+#редактирование дохода
 @login_required(login_url='/authentication/login')
 def income_edit(request, id):
     income = UserIncome.objects.get(pk=id)
