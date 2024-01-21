@@ -1,4 +1,8 @@
+// Получаем контекст 2d HTML элемента <canvas> с идентификатором "myChart" 
+//для отрисовки графика
 var ctx = document.getElementById("myChart").getContext("2d");
+
+//getRandomType случайным образом выбирает тип графика из предопределённого списка.
 const getRandomType = () => {
   const types = [
     "bar",
@@ -12,12 +16,15 @@ const getRandomType = () => {
   return types[Math.floor(Math.random() * types.length)];
 };
 
+//displayChart принимает два аргумента: data и labels. data - это массив данных, 
+//которые будут отображаться на графике, а labels - это метки категорий по оси X.
 const displayChart = (data, labels) => {
-  const type = getRandomType();
+  const type = getRandomType();//getRandomType() возвращает случайно выбранный тип диаграммы из предоставленного списка.
   var myChart = new Chart(ctx, {
+    //type определяет тип графика 
     type: type, // bar, horizontalBar, pie, line, doughnut, radar, polarArea
-    data: {
-      labels: labels,
+    data: { //data содержит метки и набор данных с цветами для отображения.
+      labels: labels, 
       datasets: [
         {
           label: `Amount (Last 6 months) (${type} View)`,
@@ -38,7 +45,7 @@ const displayChart = (data, labels) => {
         },
       ],
     },
-    options: {
+    options: { //содержит настройки для отображения, включая заголовок графика и легенду.
       title: {
         display: true,
         text: "Expense  Distribution Per Category",
@@ -55,18 +62,21 @@ const displayChart = (data, labels) => {
   });
 };
 
+//отправляет запрос на серверный URL "last_3months_stats", получает ответ в формате JSON, который содержит 
+//данные за последние три месяца преобразуются в два массива: метки (labels) и 
+//соответствующие данные (data), которые передаются в displayChart для отображения графика
 const getCategoryData = () => {
   fetch("last_3months_stats")
     .then((res) => res.json())
     .then((res1) => {
+      console.log(res1); // Здесь будет показан ответ сервера
       const results = res1.expenses_category_data;
       const [labels, data] = [Object.keys(results), Object.values(results)];
-      console.log("data", data);
       displayChart(data, labels);
     });
 
-  const data = [3000, 2000, 40000, 7000];
-  const labels = ["TRAVEL", "FOOD", "FRIENDS", "FAMILY"];
+
 };
 
-document.onload = getCategoryData();
+//Этот код связан с загрузкой страницы и вызовом функции
+window.onload = getCategoryData;
