@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 import json
 from django.http import JsonResponse
 import datetime
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 
@@ -155,5 +156,24 @@ def stats_view(request):
 
 
 def get_incomes(request):
-    incomes = UserIncome.objects.filter(owner=request.user).values('source', 'description', 'amount', 'date')
-    return JsonResponse(list(incomes), safe=False)
+    page = request.GET.get('page', 1)
+    per_page = 4  # Number of items per page
+
+    incomes = UserIncome.objects.filter(owner=request.user).order_by('-date')
+    paginator = Paginator(incomes, per_page)
+    
+    try:
+        incomes = paginator.page(page)
+    except PageNotAnInteger:
+        incomes = paginator.page(1)
+    except EmptyPage:
+        incomes = paginator.page(paginator.num_pages)
+    
+    income_data = list(incomes.object_list.values('source', 'description', 'amount', 'date'))
+    
+    return JsonResponse({
+        'data': income_data,
+        'num_pages': paginator.num_pages,
+        'current_page': int(page)
+    })
+
