@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-10">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <!-- передаю привет с income/stats.html -->
+            <a href="">Income Summary</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+           Summary
+          </li>
+        </ol>
+      </nav>
+    </div>
+
+    <div class="col-md-2">
+      <a href="" class="btn btn-primary">BACK</a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8">
+      <!-- передаю привет с income/stats.html -->
+     <canvas id="myChart" width="600" height="600"></canvas>
+    </div>
+    <div class="col-md-4">
+      <div id="income-list">
+        <!-- Dynamic incomes will be loaded here -->
+    </div>
+
+    </div>
+  
+  </div>
+
+<script src="{% static 'js/income_stats.js' %}"></script>
+<script src="{% static 'js/income_list.js' %}"></script>
+{% endblock content %}

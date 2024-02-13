@@ -2,6 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+
+    <!-- отображение страници на смартфонах -->
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -10,7 +12,7 @@
     <!-- Bootstrap core CSS -->
     <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet" />
     <link href="{% static 'css/main.css'%}" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
 
     <!-- Custom styles for this template -->
     <link href="{% static 'css/dashboard.css' %}" rel="stylesheet" />
@@ -19,19 +21,26 @@
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
       <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">TrulyExpenses</a>
 
+      <!-- отображения имени пользователя и опции выхода -->
       <ul
         class="navbar-nav px-3"
         style="display: flex; flex-direction: row; align-items: center;"
       >
+      <!-- элемент списка навигации -->
         <li class="nav-item text-nowrap">
           <span class="nav-link" href="">
+            <!-- имя пользователя текущей сессии. -->
             ({{request.user.username}})
           </span>
         </li>
 
+        <!-- элемент списка навигации, вероятно, для опции выхода -->
         <li class="nav-item text-nowrap mt-3 ml-2">
+          <!-- формa для выхода из системы. -->
           <form action="{% url  'logout' %}" method="POST">
             {% csrf_token %}
+
+            <!-- кнопку отправки формы для выхода из системы -->
             <input
               class="text text-capitalize"
               type="submit"
@@ -42,32 +51,49 @@
       </ul>
     </nav>
 
+    <!-- контейнер Bootstrap для размещения содержимого страницы -->
     <div class="container-fluid">
       <div class="row">
+        <!-- содержимое из частичного шаблона _sidebar.html -->
         {% include 'partials/_sidebar.html' %}
 
+        <!-- основное содержание страницы -->
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+
+          <!-- ограничивают область, где будет вставляться контент страницы -->
           {% block content %} {% endblock %}
         </main>
       </div>
     </div>
+    <!-- jQuery является популярным JavaScript-фреймворком для работы с DOM-деревом, 
+      анимаций и другими манипуляциями на стороне клиента -->
     <script
       src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
       integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
       crossorigin="anonymous"
     ></script>
+
+    <!-- проверяет доступность библиотеки jQuery и, если она недоступна, 
+      пытается загрузить ее из локального источника -->
     <script>
       window.jQuery ||
         document.write(
           '<script src="/docs/4.4/static/js/vendor/jquery.slim.min.js"><\/script>'
         );
     </script>
+
+    <!-- набор стилей и компонентов для создания адаптивного и интерактивного 
+      пользовательского интерфейса -->
     <script
       src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"
       integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm"
       crossorigin="anonymous"
     ></script>
+
+    <!-- набор маленьких и легких иконок для веб-страниц. -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+
+    <!-- обственный пользовательский JavaScript-файл из статических файлов Django. -->
      <script src="{% static 'js/main.js' %}"></script>
   </body>
 </html>

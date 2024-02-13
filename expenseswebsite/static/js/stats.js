@@ -29,6 +29,8 @@ const renderChart = (data, labels) => {
       ],
     },
     options: {
+      responsive: false,
+      maintainAspectRatio: false,
       title: {
         display: true,
         text: "Expenses per category",
@@ -54,3 +56,6 @@ const getChartData = () => {
 };
 
 document.onload = getChartData();
+
+
+

@@ -6,7 +6,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import json
 from django.http import JsonResponse
-# Create your views here.
+import datetime
+
+
+
+
 
 #поиск доходов
 def search_income(request):
@@ -116,3 +120,40 @@ def delete_income(request, id):
     income.delete()
     messages.success(request, 'record removed')
     return redirect('income')
+
+# предназначен для получения сводной информации о доходах в разных 
+# категориях за последние 6 месяцев
+def income_source_summary(request):
+    todays_date = datetime.date.today()
+    six_months_ago = todays_date-datetime.timedelta(days=30*6)
+    incomes = UserIncome.objects.filter(owner=request.user,
+                                      date__gte=six_months_ago, date__lte=todays_date)
+    finalrep = {}
+    
+    def get_source(expense):
+        return expense.source
+    source_list = list(set(map(get_source, incomes)))
+
+    def get_income_source_amount(source):
+        amount = 0
+        filtered_by_source = incomes.filter(source=source)
+        
+        for item in filtered_by_source:
+            amount += item.amount
+        return amount
+    
+    for source in source_list:
+        finalrep[source] = get_income_source_amount(source)
+
+    return JsonResponse({'income_source_data': finalrep}, safe=False)
+    
+
+
+def stats_view(request):
+    return render(request, 'income/stats.html')
+
+
+
+def get_incomes(request):
+    incomes = UserIncome.objects.filter(owner=request.user).values('source', 'description', 'amount', 'date')
+    return JsonResponse(list(incomes), safe=False)
