@@ -4,7 +4,7 @@ from .models import Category, Expense
 # Create your views here.
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
 from django.http import JsonResponse
 from userpreferences.models import UserPreference
@@ -209,3 +209,27 @@ def expense_category_summary(request):
 #отображает страницу статистики, и пользователь видит информацию о расходах.
 def stats_view(request):
     return render(request, 'expenses/stats.html')
+
+
+
+def get_expenses(request):
+    page = request.GET.get('page', 1)
+    per_page = 4  # Number of items per page
+
+    expenses = Expense.objects.filter(owner=request.user).order_by('-date')
+    paginator = Paginator(expenses, per_page)
+    
+    try:
+        expenses = paginator.page(page)
+    except PageNotAnInteger:
+        expenses = paginator.page(1)
+    except EmptyPage:
+        expenses = paginator.page(paginator.num_pages)
+    
+    income_data = list(expenses.object_list.values('category', 'description', 'amount', 'date'))
+    
+    return JsonResponse({
+        'data': income_data,
+        'num_pages': paginator.num_pages,
+        'current_page': int(page)
+    })

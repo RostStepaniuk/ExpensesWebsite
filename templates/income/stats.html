@@ -28,14 +28,16 @@
       <!-- передаю привет с income/stats.html -->
      <canvas id="myChart" width="600" height="600"></canvas>
     </div>
-    <div class="col-md-4">
-      <div id="income-list">
+    <div class="col-md-4 mt-3">
+      <div id="income-list" class="mb-3">
         <!-- Dynamic incomes will be loaded here -->
       </div>
-      <button id="prev-button">Previous</button>
-      <button id="next-button">Next</button>
+      <div class="d-flex justify-content-between">
+        <button id="prev-button" class="btn btn-outline-primary">Previous</button>
+        <button id="next-button" class="btn btn-primary">Next</button>
+      </div>
     </div>
-  
+    
   </div>
 
 <script src="{% static 'js/income_stats.js' %}"></script>

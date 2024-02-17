@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+
+<div class="container mt-5"> <!-- Bootstrap class to add top margin -->
+    <div class="user-info py-3 px-4 rounded shadow-sm bg-white"> <!-- Padding and shadow for the card -->
+      <h2 class="text-center mb-4">User Information</h2> <!-- Centered title with bottom margin -->
+      <p><strong>Nickname:</strong> {{ request.user.username }}</p>
+      <p><strong>Email:</strong> {{ request.user.email }}</p>
+      <p><strong>Preferred Currency:</strong> {{ currency }}</p>
+    </div>
+  </div>
+
+{% endblock content %}
