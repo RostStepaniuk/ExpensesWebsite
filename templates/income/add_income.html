@@ -32,16 +32,34 @@
             value="{{values.description}}"
           />
         </div>
+
         <div class="form-group">
-          <label for="">Sources</label>
-          <select class="form-control" name="source">
-            {% for source in sources%}
-            <option name="source" value="{{source.name}}"
-              >{{source.name}}</option
-            >
+          <label for="sourceSelect">Sources</label>
+          <select class="form-control" id="sourceSelect" name="source">
+            <option value="">--Select Existing or Add New--</option>
+            {% for source in sources %}
+            <option value="{{ source.name }}">{{ source.name }}</option>
             {% endfor %}
+            <option value="other">--Add New--</option>
           </select>
         </div>
+        <div class="form-group" id="newSourceInput" style="display:none;">
+          <label for="newSource">New Source</label>
+          <input type="text" class="form-control" id="newSource" name="new_source" placeholder="Enter new source">
+        </div>
+
+        <script>
+          document.getElementById('sourceSelect').addEventListener('change', function() {
+            var value = this.value;
+            var newSourceInput = document.getElementById('newSourceInput');
+            if(value === 'other') {
+              newSourceInput.style.display = 'block';
+            } else {
+              newSourceInput.style.display = 'none';
+            }
+          });
+        </script>
+        
         <div class="form-group">
           <label for="">Date of Income</label>
           <input
@@ -62,3 +80,8 @@
 </div>
 
 {% endblock %}
+
+
+
+
+

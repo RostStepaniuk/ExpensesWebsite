@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'userpreferences',
     'authentication',
     'userincome',
+    'user_account'
 ]
 
 #Middleware - это слой обработки 

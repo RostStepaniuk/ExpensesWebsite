@@ -8,18 +8,19 @@ from django.views.decorators.csrf import csrf_exempt
 #Для классов представлений используется метод .as_view(), чтобы преобразовать класс в функцию, 
 #  которую может понять URL-диспетчер
 urlpatterns = [
-    path('register', RegistrationView.as_view(), name="register"),
-    path('login', LoginView.as_view(), name="login"),
-    path('logout', LogoutView.as_view(), name="logout"),
-    #csrf_exempt запросы к этому URL-адресу освобождаются от проверки CSRF-токена 
-    path('validate-username', csrf_exempt(UsernameValidationView.as_view()),
+     path('register', RegistrationView.as_view(), name="register"),
+     path('login', LoginView.as_view(), name="login"),
+     path('logout', LogoutView.as_view(), name="logout"),
+     #csrf_exempt запросы к этому URL-адресу освобождаются от проверки CSRF-токена 
+     path('validate-username', csrf_exempt(UsernameValidationView.as_view()),
          name="validate-username"),
-    path('validate-email', csrf_exempt(EmailValidationView.as_view()),
+     path('validate-email', csrf_exempt(EmailValidationView.as_view()),
          name='validate_email'),
      #<token> Этот токен — это безопасный случайно сгенерированный токен, 
      #  который связан с конкретным пользователем.
      #<uidb64>: Это Base64-кодированный идентификатор пользователя.
      #id юзера кодируется, чтобы скрыть его реальное значение и сделать ссылку безопаснее.
-    path('activate/<uidb64>/<token>',
+     path('activate/<uidb64>/<token>',
          VerificationView.as_view(), name='activate'),
+     
 ]

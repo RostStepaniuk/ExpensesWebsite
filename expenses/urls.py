@@ -20,5 +20,6 @@ urlpatterns = [
     path('expense_category_summary', views.expense_category_summary,
          name="expense_category_summary"),
     path('stats', views.stats_view,
-         name="stats")
+         name="stats"),
+     path('get_expenses', views.get_expenses, name='get_expenses'),
 ]

@@ -72,45 +72,48 @@ class RegistrationView(View):
                     #message. передается в html шаблон 
                     messages.error(request, 'Password too short')
                     return render(request, 'authentication/register.html', context)
+                try:
+                    user = User.objects.create_user(username=username, email=email)
+                    user.set_password(password)
+                    user.is_active = False
+                    user.save()
+                    #get_current_site используется чтобы использовать доменное имя и 
+                    #  включить его в ссылку для активации аккаунта в вашем письме.
+                    current_site = get_current_site(request)
+                    email_body = {
+                        'user': user,
+                        'domain': current_site.domain,
+                        #кодирует user.pk в бити и base64 кодировку
+                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+    #----------------------------------------------------------------------------------------
+                        #создается токен
+                        'token': account_activation_token.make_token(user),
+                    }
+                    #revers позволяет получить URL-адрес для заданного имени маршрута "activate"
+                    link = reverse('activate', kwargs={
+                        'uidb64': email_body['uid'], 'token': email_body['token']})
+                        #kwargs является сокращением от "keyword arguments" 
+                        #специальный тип аргумента в функциях и методах, который позволяет передавать аргументы в виде словаря с ключами и значениями.
+                                
 
-                user = User.objects.create_user(username=username, email=email)
-                user.set_password(password)
-                user.is_active = False
-                user.save()
-                #get_current_site используется чтобы использовать доменное имя и 
-                #  включить его в ссылку для активации аккаунта в вашем письме.
-                current_site = get_current_site(request)
-                email_body = {
-                    'user': user,
-                    'domain': current_site.domain,
-                    #кодирует user.pk в бити и base64 кодировку
-                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-#----------------------------------------------------------------------------------------
-                    #создается токен
-                    'token': account_activation_token.make_token(user),
-                }
-                #revers позволяет получить URL-адрес для заданного имени маршрута "activate"
-                link = reverse('activate', kwargs={
-                    'uidb64': email_body['uid'], 'token': email_body['token']})
-                    #kwargs является сокращением от "keyword arguments" 
-                    #специальный тип аргумента в функциях и методах, который позволяет передавать аргументы в виде словаря с ключами и значениями.
-                               
+                    email_subject = 'Activate your account'
 
-                email_subject = 'Activate your account'
-
-                activate_url = 'http://'+current_site.domain+link
-                #сообщение на меиле которое прийдет пользователю для подтверждения регитсрации
-                email = EmailMessage(
-                    email_subject,
-                    'Hi '+user.username + ', Please the link below to activate your account \n'+activate_url,
-                    'noreply@semycolon.com',
-                    [email],
-                )
-                email.send(fail_silently=False)
-                messages.success(request, 'Account successfully created')
-                return render(request, 'authentication/register.html')
+                    activate_url = 'http://'+current_site.domain+link
+                    #сообщение на меиле которое прийдет пользователю для подтверждения регитсрации
+                    email = EmailMessage(
+                        email_subject,
+                        '\n\nHi '+user.username + ', \nPlease follow the link below to activate your account \n\n'+activate_url,
+                        'noreply@semycolon.com',
+                        [email],
+                    )
+                    email.send(fail_silently=False)
+                    messages.success(request, 'Account is almost created!\nCheck your email and confirm registration.')
+                except Exception as e:
+                    messages.error(request, 'Something went wrong...')
+                return render(request, 'authentication/login.html', context)
         #избиточний код
-        # return render(request, 'authentication/register.html')
+        messages.error(request, 'Something went wrong...')
+        return render(request, 'authentication/register.html', context)
 
 
 #класс обрабативает активацию учетних записей

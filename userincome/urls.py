@@ -15,3 +15,5 @@ urlpatterns = [
     path('income_stats', views.stats_view, name="income_stats"),
     path('get_incomes', views.get_incomes, name='get_incomes'),
 ]
+
+
